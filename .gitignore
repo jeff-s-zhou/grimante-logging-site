@@ -1,3 +1,6 @@
 venv/
 .idea/
 logging.db
+__pycache__/
+grimante-logging-site.ini
+wsgi.py
