@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, Text, func
+from sqlalchemy import Column, Integer, Text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///logging.db'
@@ -10,7 +10,7 @@ class ProgressLog(db.Model):
     id = Column(Integer, primary_key=True)
     session_id = Column(Integer)
     user_id = Column(Integer)
-    version = Column(Integer)
+    version = Column(Text)
     level_id = Column(Integer)
     seconds = Column(Integer)
     final_turn = Column(Integer)
