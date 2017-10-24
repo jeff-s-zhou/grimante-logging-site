@@ -47,11 +47,11 @@ def get_new_attempt_session():
 def log():
     json = request.get_json()
     l = ProgressLog()
-    l.attempt_session_id = int(json["attempt_session_id"])
+    l.session_id = int(json["attempt_session_id"])
     l.user_id = int(json["user_id"])
 
     l.version = json["version"]
-    
+
     l.level_id = int(json["level_id"])
     l.seconds = int(json["seconds"])
     l.final_turn = int(json["final_turn"])
