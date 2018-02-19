@@ -43,6 +43,29 @@ def get_new_attempt_session():
     return str(attempt_session.id)
 
 
+@app.route('/get_steam_key', methods=['POST'])
+def get_new_key():
+    json = request.get_json()
+    passcode = json['passcode']
+    if passcode == 'jeff_zhou':
+        return get_key_from_file()
+    else:
+        return 'incorrect passcode'
+
+
+def get_key_from_file():
+    with open('keys.txt', 'r') as f:
+        keys_list = f.readlines()
+        if len(keys_list) > 0:
+            key = keys_list.pop()
+        else:
+            key = "Sorry, it seems as though Jeff has run out of keys. Please reach out directly to obtain a copy of Grimante."
+
+    with open('keys.txt', 'w') as f:
+        f.writelines(keys_list)
+    return key
+
+
 @app.route('/log', methods=['POST'])
 def log():
     json = request.get_json()
@@ -57,14 +80,15 @@ def log():
     l.final_turn = int(json["final_turn"])
     l.outcome = int(json["outcome"])
 
+    print("printing the session id")
+    print(l.session_id)
+
     db.session.add(l)
     db.session.commit()
-
-    return 0
 
 
 
 app.debug = True
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run()
