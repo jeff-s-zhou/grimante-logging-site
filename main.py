@@ -1,12 +1,18 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, Text
 
 app = Flask(__name__)
-CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///logging.db'
 db = SQLAlchemy(app)
+
+
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response
 
 class ProgressLog(db.Model):
     id = Column(Integer, primary_key=True)
@@ -45,18 +51,9 @@ def get_new_attempt_session():
     return str(attempt_session.id)
 
 
-@app.route('/get_steam_key', methods=['POST'])
+@app.route('/get_steam_key', methods=['GET', 'OPTIONS'])
 def get_new_key():
-    json = request.get_json()
-    passcode = json['passcode']
-    if passcode == 'jeff_zhou':
-        response = jsonify({'response': get_key_from_file()})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
-    else:
-        response = jsonify({'response':'incorrect passcode'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+    return get_key_from_file()
 
 
 def get_key_from_file():
