@@ -43,7 +43,7 @@ def get_new_attempt_session():
     return str(attempt_session.id)
 
 
-@app.route('/get_steam_key', methods=['GET'])
+@app.route('/get_steam_key', methods=['POST'])
 def get_new_key():
     json = request.get_json()
     passcode = json['passcode']
