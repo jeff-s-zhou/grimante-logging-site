@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, Text
 
@@ -43,14 +43,18 @@ def get_new_attempt_session():
     return str(attempt_session.id)
 
 
-@app.route('/get_steam_key', methods=['POST'])
+@app.route('/get_steam_key', methods=['GET'])
 def get_new_key():
     json = request.get_json()
     passcode = json['passcode']
     if passcode == 'jeff_zhou':
-        return get_key_from_file()
+        response = jsonify({'response': get_key_from_file()})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
-        return 'incorrect passcode'
+        response = jsonify({'response':'incorrect passcode'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 
 def get_key_from_file():
